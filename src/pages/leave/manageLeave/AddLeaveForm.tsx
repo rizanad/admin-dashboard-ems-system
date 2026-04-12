@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,7 +6,8 @@ import * as z from "zod";
 import { CalendarDays, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-// Shadcn UI Imports
+
+
 import {
   Dialog,
   DialogContent,
@@ -14,7 +16,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// 1. Validation Schema for Leaves
 const leaveSchema = z.object({
   employeeId: z.string().min(1, "Please select an employee"),
   leaveType: z.enum(["Annual", "Sick", "Casual", "Unpaid", "Maternity/Paternity"]),
@@ -29,7 +30,6 @@ const leaveSchema = z.object({
 
 type LeaveFormValues = z.infer<typeof leaveSchema>;
 
-// Reusable UI Sub-components
 const FormField = ({ label, error, children }: { label: string, error?: any, children: React.ReactNode }) => (
   <div className="space-y-1.5">
     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">

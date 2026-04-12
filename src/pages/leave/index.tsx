@@ -5,25 +5,34 @@ import LeaveFilters from "./table/LeaveFilters";
 import AddLeaveForm from "./manageLeave/AddLeaveForm";
 import EditLeaveForm from "./manageLeave/EditLeaveForm";
 
+type LeaveRecord = {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  startDate: string;
+  endDate: string;
+  leaveType: string;
+  status: "Pending" | "Approved" | "Rejected";
+  reason: string;
+  createdAt: string;
+};
+
 const Leave = () => {
-  // Data State
   const [leaveRecords, setLeaveRecords] = useState([]);
   
-  // Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
   const [selectedDate, setSelectedDate] = useState("");
 
-  // Modal Control States
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedEditId, setSelectedEditId] = useState(null);
 
-  // Load Data from LocalStorage
   const fetchLeaves = () => {
     const data = JSON.parse(localStorage.getItem("leaves") || "[]");
-    // Sort by newest first
-    const sortedData = data.sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    const sortedData = (data as LeaveRecord[]).sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() -
+        new Date(a.createdAt).getTime()
     );
     setLeaveRecords(sortedData);
   };
@@ -32,13 +41,11 @@ const Leave = () => {
     fetchLeaves();
   }, []);
 
-  // Handle Edit Trigger
-  const handleEditTrigger = (id) => {
+  const handleEditTrigger = (id:string) => {
     setSelectedEditId(id);
     setIsEditOpen(true);
   };
 
-  // Filter Logic
   const filteredLeaves = leaveRecords.filter((record) => {
     const matchesSearch = 
       record.employeeName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -55,7 +62,6 @@ const Leave = () => {
 
   return (
     <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
-      {/* HEADER SECTION */}
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className="p-3 bg-white rounded-2xl shadow-sm border border-emerald-50 text-emerald-600">
@@ -76,12 +82,10 @@ const Leave = () => {
             <Download size={16} /> Export Report
           </button>
           
-          {/* Add Form Component (contains its own trigger button) */}
           <AddLeaveForm onSave={fetchLeaves} />
         </div>
       </header>
 
-      {/* FILTERS SECTION */}
       <LeaveFilters 
         searchQuery={searchQuery} 
         setSearchQuery={setSearchQuery}
@@ -91,7 +95,6 @@ const Leave = () => {
         setSelectedDate={setSelectedDate}
       />
 
-      {/* DATA TABLE SECTION */}
       <div className="space-y-4">
         <div className="flex items-center justify-between px-6">
           <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
@@ -105,7 +108,6 @@ const Leave = () => {
         />
       </div>
 
-      {/* EDIT MODAL */}
       <EditLeaveForm 
         isOpen={isEditOpen} 
         onClose={() => {

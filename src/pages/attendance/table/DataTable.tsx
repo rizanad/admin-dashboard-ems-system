@@ -1,21 +1,34 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Clock, MessageSquareText, Edit3 } from "lucide-react"; // Added Edit3
+import { Eye, Clock, MessageSquareText, Edit3 } from "lucide-react"; 
 import { useState } from "react";
 import AttendanceTableHeader from "./Columns";
-import ViewAttendance from "../manageAttendance/ViewAttendance"; 
+import ViewAttendance from "../manageAttendance/ViewAttendance";
 
-const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
+type AttendanceStatus = "Present" | "Late" | "Absent" | "On Leave";
+
+export type Attendance = {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  date: string;
+  checkIn?: string;
+  checkOut?: string;
+  status: AttendanceStatus;
+  notes?: string;
+  createdAt?: string;
+};
+
+const DataTable = ({ data, onEditClick }) => { 
   const [selectedId, setSelectedId] = useState(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
 
-  const handleViewDetails = (id) => {
+  const handleViewDetails = (id:string) => {
     setSelectedId(id);
     setIsViewOpen(true);
   };
 
-  // Status Badge Logic
-  const getStatusStyle = (status) => {
+  const getStatusStyle = (status:AttendanceStatus) => {
     switch (status) {
       case "Present": return "bg-emerald-100 text-emerald-700 shadow-[0_0_8px_rgba(16,185,129,0.2)]";
       case "Late": return "bg-amber-100 text-amber-700 shadow-[0_0_8px_rgba(245,158,11,0.2)]";
@@ -32,10 +45,9 @@ const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
           <AttendanceTableHeader />
           <TableBody>
             {data.length > 0 ? (
-              data.map((record) => (
+              data.map((record:Attendance) => (
                 <TableRow key={record.id} className="group hover:bg-emerald-50/20 transition-all border-b border-slate-50 last:border-0">
                   
-                  {/* DATE */}
                   <TableCell className="font-black text-slate-800 text-xs">
                     <div className="flex items-center gap-2">
                       <div className="w-1 h-6 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -43,7 +55,6 @@ const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
                     </div>
                   </TableCell>
 
-                  {/* EMPLOYEE PROFILE */}
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-black text-[10px]">
@@ -56,7 +67,6 @@ const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
                     </div>
                   </TableCell>
 
-                  {/* LOG HOURS */}
                   <TableCell>
                     {record.status !== "Absent" ? (
                       <div className="flex items-center gap-2 text-slate-600">
@@ -68,14 +78,12 @@ const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
                     )}
                   </TableCell>
 
-                  {/* ATTENDANCE STATUS */}
                   <TableCell>
                     <Badge className={`${getStatusStyle(record.status)} border-none px-3 py-1 rounded-lg text-[10px] font-black transition-all`}>
                       {record.status}
                     </Badge>
                   </TableCell>
 
-                  {/* REMARKS INDICATOR */}
                   <TableCell>
                     {record.notes ? (
                       <div className="flex items-center gap-1.5 text-emerald-600">
@@ -87,17 +95,14 @@ const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
                     )}
                   </TableCell>
 
-                  {/* ACTIONS */}
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      {/* VIEW ACTION */}
                       <ActionButton 
                         icon={Eye} 
                         onClick={() => handleViewDetails(record.id)} 
                         color="text-emerald-600" 
                         hoverBg="hover:bg-emerald-50"
                       />
-                      {/* EDIT ACTION - Triggers parent handleEditTrigger */}
                       <ActionButton 
                         icon={Edit3} 
                         onClick={() => onEditClick(record.id)} 
@@ -119,7 +124,6 @@ const DataTable = ({ data, onEditClick }) => { // Destructured onEditClick
         </Table>
       </div>
 
-      {/* VIEW MODAL */}
       <ViewAttendance 
         isOpen={isViewOpen} 
         onClose={() => setIsViewOpen(false)} 

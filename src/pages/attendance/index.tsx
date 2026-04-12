@@ -6,15 +6,12 @@ import AddAttendanceForm from "./manageAttendance/AddAttendanceForm";
 import EditAttendanceForm from "./manageAttendance/EditAttendanceForm";
 
 const Attendance = () => {
-  // --- Data State ---
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   
-  // --- Filter States ---
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
 
-  // --- Edit Modal States ---
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedEditId, setSelectedEditId] = useState(null);
 
@@ -28,15 +25,12 @@ const Attendance = () => {
     fetchAttendance();
   }, []);
 
-  /**
-   * Triggered from the DataTable when the Edit button is clicked
-   */
-  const handleEditTrigger = (id) => {
+
+  const handleEditTrigger = (id:string) => {
     setSelectedEditId(id);
     setIsEditOpen(true);
   };
 
-  // --- Filtering Logic ---
   const filteredAttendance = attendanceRecords.filter(record => {
     const matchesSearch = `${record.employeeName} ${record.employeeId}`
       .toLowerCase()
@@ -52,7 +46,6 @@ const Attendance = () => {
   return (
     <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
       
-      {/* HEADER SECTION */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-xl font-black text-slate-900 tracking-tight leading-none">
@@ -68,12 +61,10 @@ const Attendance = () => {
             <Download size={16} /> Export CSV
           </button>
           
-          {/* ADD MODAL COMPONENT */}
           <AddAttendanceForm onSave={fetchAttendance} />
         </div>
       </header>
 
-      {/* EDIT MODAL COMPONENT (Hidden until handleEditTrigger is called) */}
       <EditAttendanceForm 
         isOpen={isEditOpen} 
         onClose={() => setIsEditOpen(false)} 
@@ -81,7 +72,6 @@ const Attendance = () => {
         onUpdate={fetchAttendance}
       />
 
-      {/* FILTER BAR */}
       <AttendanceFilters 
         searchQuery={searchQuery} 
         setSearchQuery={setSearchQuery}
@@ -91,7 +81,6 @@ const Attendance = () => {
         setSelectedDate={setSelectedDate}
       />
 
-      {/* DATA TABLE SECTION */}
       <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
         <AttendanceTable 
           data={filteredAttendance} 
@@ -99,7 +88,6 @@ const Attendance = () => {
         />
       </div>
 
-      {/* EMPTY STATE HELPER */}
       {filteredAttendance.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 bg-slate-50/50 rounded-[2.5rem] border-2 border-dashed border-slate-100">
           <p className="text-slate-400 font-bold italic text-sm">

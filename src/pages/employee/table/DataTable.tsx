@@ -4,7 +4,21 @@ import { Eye, Edit3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import EmployeeTableHeader from "./Columns";
 
-const DataTable = ({ data }) => {
+type Employee = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  department: string;
+  status: "Active" | "Inactive" | "On Leave";
+  joinDate: string;
+};
+
+type Props = {
+  data: Employee[];
+};
+
+const DataTable = ({ data }:Props) => {
   const navigate = useNavigate();
 
   return (

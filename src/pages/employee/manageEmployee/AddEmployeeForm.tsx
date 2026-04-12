@@ -1,5 +1,5 @@
 
-import { useForm } from "react-hook-form";
+import { useForm, type FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { 
@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+
+type EmployeeFormValues = z.infer<typeof employeeSchema>
 
 
 const employeeSchema = z.object({
@@ -55,7 +57,7 @@ const FormField = ({ label, error, children }) => (
   </div>
 );
 
-const inputStyles = (error) => `
+const inputStyles = (error:FieldError) => `
   w-full px-4 py-2.5 rounded-xl bg-slate-50 border transition-all outline-none text-sm
   ${error 
     ? "border-rose-200 focus:ring-4 focus:ring-rose-500/5 focus:border-rose-400" 
@@ -70,18 +72,15 @@ const AddEmployeeForm = () => {
     defaultValues: { status: "Active" }
   });
 
-  const onSubmit = async (data) => {
-    // 1. Get existing data or empty array
+  const onSubmit = async (data:EmployeeFormValues) => {
     const existingEmployees = JSON.parse(localStorage.getItem("employees") || "[]");
   
-    // 2. Add a unique ID and created date
     const newEmployee = {
       ...data,
-      id: `EMP-${Math.floor(1000 + Math.random() * 9000)}`, // Generates EMP-1234
+      id: `EMP-${Math.floor(1000 + Math.random() * 9000)}`, 
       createdAt: new Date().toISOString(),
     };
   
-    // 3. Save back to localStorage
     const updatedList = [...existingEmployees, newEmployee];
     localStorage.setItem("employees", JSON.stringify(updatedList));
   

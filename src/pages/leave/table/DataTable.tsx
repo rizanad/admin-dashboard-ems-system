@@ -5,17 +5,29 @@ import { useState } from "react";
 import LeaveTableHeader from "./Columns"; 
 import ViewLeave from "../manageLeave/ViewLeave"; 
 
+type LeaveStatus = "Approved" | "Pending" | "Rejected";
+
+type LeaveRecord = {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  startDate: string;
+  endDate: string;
+  leaveType: "Annual" | "Sick" | "Casual" | "Unpaid" | "Maternity/Paternity";
+  status: "Pending" | "Approved" | "Rejected";
+  reason?: string;
+};
+
 const LeaveTable = ({ data, onEditClick }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
 
-  const handleViewDetails = (id) => {
+  const handleViewDetails = (id:string) => {
     setSelectedId(id);
     setIsViewOpen(true);
   };
 
-  // Status Badge Logic for Leaves
-  const getStatusStyle = (status) => {
+  const getStatusStyle = (status:LeaveStatus) => {
     switch (status) {
       case "Approved": return "bg-emerald-100 text-emerald-700 shadow-[0_0_8px_rgba(16,185,129,0.2)]";
       case "Pending": return "bg-amber-100 text-amber-700 shadow-[0_0_8px_rgba(245,158,11,0.2)]";
@@ -31,10 +43,9 @@ const LeaveTable = ({ data, onEditClick }) => {
           <LeaveTableHeader />
           <TableBody>
             {data.length > 0 ? (
-              data.map((record) => (
+              data.map((record:LeaveRecord) => (
                 <TableRow key={record.id} className="group hover:bg-emerald-50/20 transition-all border-b border-slate-50 last:border-0">
                   
-                  {/* DATE RANGE */}
                   <TableCell className="font-black text-slate-800 text-xs">
                     <div className="flex items-center gap-2">
                       <div className="w-1 h-6 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -45,7 +56,6 @@ const LeaveTable = ({ data, onEditClick }) => {
                     </div>
                   </TableCell>
 
-                  {/* EMPLOYEE PROFILE */}
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-black text-[10px]">
@@ -58,7 +68,6 @@ const LeaveTable = ({ data, onEditClick }) => {
                     </div>
                   </TableCell>
 
-                  {/* LEAVE TYPE */}
                   <TableCell>
                     <div className="flex items-center gap-2 text-slate-600">
                       <CalendarRange size={14} className="text-emerald-500" />
@@ -66,14 +75,12 @@ const LeaveTable = ({ data, onEditClick }) => {
                     </div>
                   </TableCell>
 
-                  {/* APPROVAL STATUS */}
                   <TableCell>
                     <Badge className={`${getStatusStyle(record.status)} border-none px-3 py-1 rounded-lg text-[10px] font-black transition-all`}>
                       {record.status}
                     </Badge>
                   </TableCell>
 
-                  {/* REASON INDICATOR */}
                   <TableCell>
                     {record.reason ? (
                       <div className="flex items-center gap-1.5 text-emerald-600">
@@ -85,7 +92,6 @@ const LeaveTable = ({ data, onEditClick }) => {
                     )}
                   </TableCell>
 
-                  {/* ACTIONS */}
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <ActionButton 
@@ -115,7 +121,6 @@ const LeaveTable = ({ data, onEditClick }) => {
         </Table>
       </div>
 
-      {/* VIEW MODAL */}
       <ViewLeave 
         isOpen={isViewOpen} 
         onClose={() => setIsViewOpen(false)} 

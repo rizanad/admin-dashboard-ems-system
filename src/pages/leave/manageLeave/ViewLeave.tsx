@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,20 +9,15 @@ import {
   BadgeCheck, 
   User,
   Hash,
-  AlertCircle,
   CalendarRange,
   Briefcase,
   Info
 } from "lucide-react";
 
-/**
- * ViewLeave Component
- * Mirrored from ViewAttendance with Leave-specific fields
- */
+
 const ViewLeave = ({ isOpen, onClose, leaveId }) => {
   const [record, setRecord] = useState(null);
 
-  // Fetch data directly from LocalStorage when ID changes or modal opens
   useEffect(() => {
     if (leaveId && isOpen) {
       const allRecords = JSON.parse(localStorage.getItem("leaves") || "[]");
@@ -31,8 +26,7 @@ const ViewLeave = ({ isOpen, onClose, leaveId }) => {
     }
   }, [leaveId, isOpen]);
 
-  // Helper for status badge styling (Mirrors Attendance but for Approval workflow)
-  const getStatusConfig = (status) => {
+  const getStatusConfig = (status:any) => {
     const configs = {
       Approved: "bg-emerald-50 text-emerald-700 border-emerald-100",
       Pending: "bg-amber-50 text-amber-700 border-amber-100",
@@ -41,7 +35,6 @@ const ViewLeave = ({ isOpen, onClose, leaveId }) => {
     return configs[status] || "bg-slate-50 text-slate-700 border-slate-100";
   };
 
-  // Internal component for the data rows
   const DetailCard = ({ icon: Icon, label, value, colorClass = "text-slate-700" }) => (
     <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-50 bg-slate-50/50 transition-all hover:bg-white hover:shadow-sm">
       <div className="p-2.5 bg-white rounded-xl shadow-sm border border-slate-100 text-emerald-600">
@@ -64,9 +57,7 @@ const ViewLeave = ({ isOpen, onClose, leaveId }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl p-0 overflow-hidden border-none rounded-[2.5rem] bg-white">
         
-        {/* TOP HEADER SECTION */}
         <div className="relative bg-slate-900 p-8 pt-10 overflow-hidden">
-          {/* Decorative Background Elements */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl -mr-10 -mt-10" />
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-emerald-600/10 rounded-full blur-2xl -ml-5 -mb-5" />
           
@@ -92,7 +83,6 @@ const ViewLeave = ({ isOpen, onClose, leaveId }) => {
           </div>
         </div>
 
-        {/* INFO GRID SECTION */}
         <div className="p-8 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <DetailCard 
@@ -136,7 +126,6 @@ const ViewLeave = ({ isOpen, onClose, leaveId }) => {
             </div>
           </div>
 
-          {/* ACTION BUTTON */}
           <button 
             onClick={onClose}
             className="w-full mt-4 py-4 bg-emerald-600 text-white rounded-2xl font-black text-sm hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-100 active:scale-[0.98]"

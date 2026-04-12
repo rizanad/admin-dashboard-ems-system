@@ -1,5 +1,5 @@
 import  { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { 
@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-// Shadcn UI Imports
 import {
   Dialog,
   DialogContent,
@@ -17,7 +16,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// 1. Validation Schema
+type AttendanceFormValues = {
+  employeeId: string
+  status: "Present" | "Absent" | "Late" | "On Leave"
+  date: string
+  checkIn?: string
+  checkOut?: string
+  notes?: string
+}
+
 const attendanceSchema = z.object({
   employeeId: z.string().min(1, "Please select an employee"),
   date: z.string().min(1, "Date is required"),
@@ -27,7 +34,6 @@ const attendanceSchema = z.object({
   notes: z.string().max(200, "Notes are too long").optional(),
 });
 
-// Reusable UI Sub-components
 const FormField = ({ label, error, children }) => (
   <div className="space-y-1.5">
     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
@@ -38,7 +44,7 @@ const FormField = ({ label, error, children }) => (
   </div>
 );
 
-const inputStyles = (error) => `
+const inputStyles = (error?:FieldError) => `
   w-full px-4 py-2.5 rounded-xl bg-slate-50 border transition-all outline-none text-sm font-bold text-slate-700
   ${error 
     ? "border-rose-200 focus:ring-4 focus:ring-rose-500/5 focus:border-rose-400" 
@@ -53,7 +59,7 @@ const AddAttendanceForm = ({ onSave }) => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("employees") || "[]");
     setEmployees(data);
-  }, [open]); // Refresh list whenever modal opens
+  }, [open]); 
 
   const { register, handleSubmit, watch, formState: { errors, isSubmitting }, reset } = useForm({
     resolver: zodResolver(attendanceSchema),
@@ -65,7 +71,7 @@ const AddAttendanceForm = ({ onSave }) => {
 
   const selectedStatus = watch("status");
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data:AttendanceFormValues) => {
     const existingAttendance = JSON.parse(localStorage.getItem("attendance") || "[]");
     const emp = employees.find(e => e.id === data.employeeId);
     
@@ -80,21 +86,19 @@ const AddAttendanceForm = ({ onSave }) => {
     localStorage.setItem("attendance", JSON.stringify(updatedList));
   
     toast.success("Attendance marked successfully");
-    if (onSave) onSave(); // Refresh the table in parent
-    setOpen(false); // Close modal
+    if (onSave) onSave(); 
+    setOpen(false); 
     reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* 1. THE TRIGGER BUTTON */}
       <DialogTrigger asChild>
         <button className="flex items-center gap-2 px-5 py-3 bg-emerald-600 text-white rounded-2xl text-sm hover:bg-emerald-700 transition-all shadow-lg font-black shadow-emerald-100 active:scale-95">
           <Plus size={18} /> Mark Attendance
         </button>
       </DialogTrigger>
 
-      {/* 2. THE MODAL CONTENT */}
       <DialogContent className="max-w-2xl p-0 overflow-hidden border-none rounded-[2.5rem] shadow-2xl bg-white">
         <div className="bg-slate-900 p-6 text-white">
           <DialogHeader>
