@@ -4,7 +4,17 @@ import AttendanceTable from "./table/DataTable";
 import AttendanceFilters from "./table/AttendanceFilters";
 import AddAttendanceForm from "./manageAttendance/AddAttendanceForm";
 import EditAttendanceForm from "./manageAttendance/EditAttendanceForm";
-import type { Attendance } from "./table/DataTable";
+// import type { Attendance } from "./table/DataTable";
+
+type Attendance = {
+  id: string;
+  employeeId: string;
+  employeeName: string;
+  date: string;
+  checkIn?: string;
+  checkOut?: string;
+  status: "Present" | "Absent" | "Late";
+};
 
 const Attendance = () => {
   const [attendanceRecords, setAttendanceRecords] = useState<Attendance[]>([]);

@@ -3,7 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EmployeeTable from "./table/DataTable";
 import EmployeeFilters from "./table/EmployeeFilters";
-import type { Employee } from "../employee/types/employee";
+// import type { Employee } from "../employee/types/employee";
+
+export type EmployeeStatus = "Active" | "Inactive" | "On Leave";
+
+export type Employee = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  email:string;
+  department: string;
+  status: EmployeeStatus;
+  joinDate: string;
+};
 
 const Employee = () => {
   const navigate = useNavigate();
