@@ -6,7 +6,6 @@ import {
   CalendarOff, 
   Package, 
   ChevronRight,
-  Leaf,
   Workflow
 } from "lucide-react";
 
@@ -21,7 +20,6 @@ const navItems = [
 const Sidebar = () => {
   return (
     <aside className="w-72 h-screen bg-[#fcfdfc] border-r border-emerald-100/50 flex flex-col sticky top-0">
-      {/* Brand Section */}
       <div className="p-8">
         <div className="flex items-center gap-3 group cursor-default">
           <div className="h-11 w-11 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform duration-300">
@@ -29,12 +27,10 @@ const Sidebar = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-xl text-slate-800 leading-none tracking-tight">WorkSphere</span>
-            {/* <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.2em] mt-1">HR System</span> */}
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 px-4 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
