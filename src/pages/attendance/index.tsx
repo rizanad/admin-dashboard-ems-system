@@ -1,0 +1,114 @@
+import{ useEffect, useState } from "react";
+import { Download } from "lucide-react";
+import AttendanceTable from "./table/DataTable"; 
+import AttendanceFilters from "./table/AttendanceFilters";
+import AddAttendanceForm from "./manageAttendance/AddAttendanceForm"; 
+import EditAttendanceForm from "./manageAttendance/EditAttendanceForm";
+
+const Attendance = () => {
+  // --- Data State ---
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  
+  // --- Filter States ---
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All Status");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+
+  // --- Edit Modal States ---
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [selectedEditId, setSelectedEditId] = useState(null);
+
+  
+  const fetchAttendance = () => {
+    const data = JSON.parse(localStorage.getItem("attendance") || "[]");
+    setAttendanceRecords(data);
+  };
+
+  useEffect(() => {
+    fetchAttendance();
+  }, []);
+
+  /**
+   * Triggered from the DataTable when the Edit button is clicked
+   */
+  const handleEditTrigger = (id) => {
+    setSelectedEditId(id);
+    setIsEditOpen(true);
+  };
+
+  // --- Filtering Logic ---
+  const filteredAttendance = attendanceRecords.filter(record => {
+    const matchesSearch = `${record.employeeName} ${record.employeeId}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    
+    const matchesStatus = selectedStatus === "All Status" || record.status === selectedStatus;
+    
+    const matchesDate = !selectedDate || record.date === selectedDate;
+
+    return matchesSearch && matchesStatus && matchesDate;
+  });
+
+  return (
+    <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
+      
+      {/* HEADER SECTION */}
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-xl font-black text-slate-900 tracking-tight leading-none">
+            Attendance Logs
+          </h1>
+          <p className="text-slate-400 text-sm mt-2">
+            Monitor daily check-ins and check-outs.
+          </p>
+        </div>
+        
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-5 py-3 text-slate-600 bg-white border border-slate-200 rounded-2xl text-xs font-bold hover:border-emerald-400 hover:text-emerald-700 transition-all shadow-sm active:scale-95">
+            <Download size={16} /> Export CSV
+          </button>
+          
+          {/* ADD MODAL COMPONENT */}
+          <AddAttendanceForm onSave={fetchAttendance} />
+        </div>
+      </header>
+
+      {/* EDIT MODAL COMPONENT (Hidden until handleEditTrigger is called) */}
+      <EditAttendanceForm 
+        isOpen={isEditOpen} 
+        onClose={() => setIsEditOpen(false)} 
+        attendanceId={selectedEditId}
+        onUpdate={fetchAttendance}
+      />
+
+      {/* FILTER BAR */}
+      <AttendanceFilters 
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery}
+        selectedStatus={selectedStatus}
+        setSelectedStatus={setSelectedStatus}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+
+      {/* DATA TABLE SECTION */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+        <AttendanceTable 
+          data={filteredAttendance} 
+          onEditClick={handleEditTrigger} 
+        />
+      </div>
+
+      {/* EMPTY STATE HELPER */}
+      {filteredAttendance.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-20 bg-slate-50/50 rounded-[2.5rem] border-2 border-dashed border-slate-100">
+          <p className="text-slate-400 font-bold italic text-sm">
+            No records match your current filters.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Attendance;
