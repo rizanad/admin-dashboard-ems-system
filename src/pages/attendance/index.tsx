@@ -1,23 +1,28 @@
-import{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import AttendanceTable from "./table/DataTable"; 
+import AttendanceTable from "./table/DataTable";
 import AttendanceFilters from "./table/AttendanceFilters";
-import AddAttendanceForm from "./manageAttendance/AddAttendanceForm"; 
+import AddAttendanceForm from "./manageAttendance/AddAttendanceForm";
 import EditAttendanceForm from "./manageAttendance/EditAttendanceForm";
+import type { Attendance } from "./table/DataTable";
 
 const Attendance = () => {
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  
+  const [attendanceRecords, setAttendanceRecords] = useState<Attendance[]>([]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [selectedEditId, setSelectedEditId] = useState(null);
+  const [selectedEditId, setSelectedEditId] = useState<string | null>(null);
 
-  
   const fetchAttendance = () => {
-    const data = JSON.parse(localStorage.getItem("attendance") || "[]");
+    const data = JSON.parse(
+      localStorage.getItem("attendance") || "[]"
+    ) as Attendance[];
+
     setAttendanceRecords(data);
   };
 
@@ -25,19 +30,19 @@ const Attendance = () => {
     fetchAttendance();
   }, []);
 
-
-  const handleEditTrigger = (id:string) => {
+  const handleEditTrigger = (id: string) => {
     setSelectedEditId(id);
     setIsEditOpen(true);
   };
 
-  const filteredAttendance = attendanceRecords.filter(record => {
+  const filteredAttendance = attendanceRecords.filter((record) => {
     const matchesSearch = `${record.employeeName} ${record.employeeId}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    
-    const matchesStatus = selectedStatus === "All Status" || record.status === selectedStatus;
-    
+
+    const matchesStatus =
+      selectedStatus === "All Status" || record.status === selectedStatus;
+
     const matchesDate = !selectedDate || record.date === selectedDate;
 
     return matchesSearch && matchesStatus && matchesDate;
@@ -45,7 +50,6 @@ const Attendance = () => {
 
   return (
     <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
-      
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-xl font-black text-slate-900 tracking-tight leading-none">
@@ -55,25 +59,25 @@ const Attendance = () => {
             Monitor daily check-ins and check-outs.
           </p>
         </div>
-        
+
         <div className="flex gap-3">
           <button className="flex items-center gap-2 px-5 py-3 text-slate-600 bg-white border border-slate-200 rounded-2xl text-xs font-bold hover:border-emerald-400 hover:text-emerald-700 transition-all shadow-sm active:scale-95">
             <Download size={16} /> Export CSV
           </button>
-          
+
           <AddAttendanceForm onSave={fetchAttendance} />
         </div>
       </header>
 
-      <EditAttendanceForm 
-        isOpen={isEditOpen} 
-        onClose={() => setIsEditOpen(false)} 
+      <EditAttendanceForm
+        isOpen={isEditOpen}
+        onClose={setIsEditOpen}
         attendanceId={selectedEditId}
         onUpdate={fetchAttendance}
       />
 
-      <AttendanceFilters 
-        searchQuery={searchQuery} 
+      <AttendanceFilters
+        searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
@@ -82,9 +86,9 @@ const Attendance = () => {
       />
 
       <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
-        <AttendanceTable 
-          data={filteredAttendance} 
-          onEditClick={handleEditTrigger} 
+        <AttendanceTable
+          data={filteredAttendance}
+          onEditClick={handleEditTrigger}
         />
       </div>
 

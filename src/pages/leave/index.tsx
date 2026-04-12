@@ -1,39 +1,43 @@
-import  { useEffect, useState } from "react";
-import { Download,  CalendarClock } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Download, CalendarClock } from "lucide-react";
 import LeaveTable from "./table/DataTable";
 import LeaveFilters from "./table/LeaveFilters";
 import AddLeaveForm from "./manageLeave/AddLeaveForm";
 import EditLeaveForm from "./manageLeave/EditLeaveForm";
 
-type LeaveRecord = {
+export type LeaveStatus = "Pending" | "Approved" | "Rejected";
+
+export type LeaveRecord = {
   id: string;
   employeeId: string;
   employeeName: string;
   startDate: string;
   endDate: string;
   leaveType: string;
-  status: "Pending" | "Approved" | "Rejected";
+  status: LeaveStatus;
   reason: string;
   createdAt: string;
 };
 
 const Leave = () => {
-  const [leaveRecords, setLeaveRecords] = useState([]);
-  
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("All Status");
-  const [selectedDate, setSelectedDate] = useState("");
+  const [leaveRecords, setLeaveRecords] = useState<LeaveRecord[]>([]);
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [selectedEditId, setSelectedEditId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("All Status");
+  const [selectedDate, setSelectedDate] = useState<string>("");
+
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+  const [selectedEditId, setSelectedEditId] = useState<string | null>(null);
 
   const fetchLeaves = () => {
-    const data = JSON.parse(localStorage.getItem("leaves") || "[]");
-    const sortedData = (data as LeaveRecord[]).sort(
+    const data = JSON.parse(localStorage.getItem("leaves") || "[]") as LeaveRecord[];
+
+    const sortedData = data.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() -
         new Date(a.createdAt).getTime()
     );
+
     setLeaveRecords(sortedData);
   };
 
@@ -41,20 +45,20 @@ const Leave = () => {
     fetchLeaves();
   }, []);
 
-  const handleEditTrigger = (id:string) => {
+  const handleEditTrigger = (id: string) => {
     setSelectedEditId(id);
     setIsEditOpen(true);
   };
 
   const filteredLeaves = leaveRecords.filter((record) => {
-    const matchesSearch = 
-      record.employeeName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      record.employeeId?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesStatus = 
+    const matchesSearch =
+      record.employeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      record.employeeId.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus =
       selectedStatus === "All Status" || record.status === selectedStatus;
-    
-    const matchesDate = 
+
+    const matchesDate =
       !selectedDate || record.startDate === selectedDate;
 
     return matchesSearch && matchesStatus && matchesDate;
@@ -62,6 +66,7 @@ const Leave = () => {
 
   return (
     <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
+
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className="p-3 bg-white rounded-2xl shadow-sm border border-emerald-50 text-emerald-600">
@@ -81,13 +86,13 @@ const Leave = () => {
           <button className="flex items-center gap-2 px-5 py-3 bg-white text-slate-600 border border-slate-100 rounded-2xl text-xs font-black hover:bg-slate-50 transition-all shadow-sm">
             <Download size={16} /> Export Report
           </button>
-          
+
           <AddLeaveForm onSave={fetchLeaves} />
         </div>
       </header>
 
-      <LeaveFilters 
-        searchQuery={searchQuery} 
+      <LeaveFilters
+        searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
@@ -101,19 +106,19 @@ const Leave = () => {
             Request List ({filteredLeaves.length})
           </h2>
         </div>
-        
-        <LeaveTable 
-          data={filteredLeaves} 
-          onEditClick={handleEditTrigger} 
+
+        <LeaveTable
+          data={filteredLeaves}
+          onEditClick={handleEditTrigger}
         />
       </div>
 
-      <EditLeaveForm 
-        isOpen={isEditOpen} 
+      <EditLeaveForm
+        isOpen={isEditOpen}
         onClose={() => {
           setIsEditOpen(false);
           setSelectedEditId(null);
-        }} 
+        }}
         leaveId={selectedEditId}
         onUpdate={fetchLeaves}
       />
