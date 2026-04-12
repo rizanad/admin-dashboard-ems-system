@@ -5,7 +5,14 @@ import {
   User,
   X,
   CheckCircle2,
-  Globe
+  Globe,
+  Fingerprint,
+  MapPin,
+  Phone,
+  Mail,
+  PhoneIcon,
+  Calendar,
+  Briefcase
 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -173,6 +180,78 @@ const AddEmployeeForm = () => {
                 <option value="Bachelors">Bachelors</option>
                 <option value="Masters">Masters</option>
                 <option value="PHD">PHD</option>
+              </select>
+            </FormField>
+          </div>
+        </section>
+
+        {/* Section 2: Contact Details */}
+        <section className="bg-white p-8 rounded-[2rem] border border-emerald-50 shadow-sm">
+          <SectionHeader icon={PhoneIcon} title="Contact Details" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField label="Email Address" error={errors.email}>
+              <div className="relative">
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input type="email" {...register("email")} className={`${inputStyles(errors.email)} pl-9`} placeholder="john.doe@company.com" />
+              </div>
+            </FormField>
+            <FormField label="Contact Number" error={errors.contactNumber}>
+              <div className="relative">
+                <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input {...register("contactNumber")} className={`${inputStyles(errors.contactNumber)} pl-9`} placeholder="+1 234 567 890" />
+              </div>
+            </FormField>
+            <div className="md:col-span-2">
+              <FormField label="Residential Address" error={errors.address}>
+                <div className="relative">
+                  <MapPin size={14} className="absolute left-3 top-3 text-slate-400" />
+                  <textarea {...register("address")} className={`${inputStyles(errors.address)} pl-9 min-h-20 pt-2`} placeholder="Street, City, State, Zip Code" />
+                </div>
+              </FormField>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: Identity & Documents */}
+        <section className="bg-white p-8 rounded-[2rem] border border-emerald-50 shadow-sm">
+          <SectionHeader icon={Fingerprint} title="Identity & Documents" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField label="PAN Number" error={errors.panNumber}>
+              <input {...register("panNumber")} className={inputStyles(errors.panNumber)} placeholder="ABCDE1234F" />
+            </FormField>
+            <FormField label="Citizenship Number" error={errors.citizenshipNumber}>
+              <input {...register("citizenshipNumber")} className={inputStyles(errors.citizenshipNumber)} placeholder="12-34-56-7890" />
+            </FormField>
+          </div>
+        </section>
+
+        {/* Section 4: Professional Details */}
+        <section className="bg-white p-8 rounded-[2rem] border border-emerald-50 shadow-sm">
+          <SectionHeader icon={Briefcase} title="Professional Details" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <FormField label="Job Role" error={errors.role}>
+              <input {...register("role")} className={inputStyles(errors.role)} placeholder="Software Engineer" />
+            </FormField>
+            <FormField label="Department" error={errors.department}>
+              <select {...register("department")} className={inputStyles(errors.department)}>
+                <option value="">Select Dept</option>
+                <option value="Engineering">Engineering</option>
+                <option value="HR">HR</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+              </select>
+            </FormField>
+            <FormField label="Joining Date" error={errors.joinDate}>
+              <div className="relative">
+                <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input type="date" {...register("joinDate")} className={`${inputStyles(errors.joinDate)} pl-9`} />
+              </div>
+            </FormField>
+            <FormField label="Current Status" error={errors.status}>
+              <select {...register("status")} className={inputStyles(errors.status)}>
+                <option value="Active">Active</option>
+                <option value="On Leave">On Leave</option>
+                <option value="Inactive">Inactive</option>
               </select>
             </FormField>
           </div>

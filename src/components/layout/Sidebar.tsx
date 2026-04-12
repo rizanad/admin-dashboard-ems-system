@@ -6,7 +6,8 @@ import {
   CalendarOff, 
   Package, 
   ChevronRight,
-  Leaf
+  Leaf,
+  Workflow
 } from "lucide-react";
 
 const navItems = [
@@ -24,11 +25,11 @@ const Sidebar = () => {
       <div className="p-8">
         <div className="flex items-center gap-3 group cursor-default">
           <div className="h-11 w-11 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform duration-300">
-            <Leaf size={24} className="text-white" />
+            <Workflow size={24} className="text-white" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-xl text-slate-800 leading-none tracking-tight">EcoSystem</span>
-            <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.2em] mt-1">Management</span>
+            <span className="font-bold text-xl text-slate-800 leading-none tracking-tight">WorkSphere</span>
+            {/* <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.2em] mt-1">HR System</span> */}
           </div>
         </div>
       </div>
@@ -52,7 +53,6 @@ const Sidebar = () => {
             >
               {({ isActive }) => (
                 <>
-                  {/* Active Background Glow */}
                   {isActive && (
                     <div className="absolute inset-0 bg-linear-to-r from-emerald-50 to-transparent rounded-2xl -z-10" />
                   )}
@@ -85,7 +85,6 @@ const Sidebar = () => {
         })}
       </nav>
 
-      {/* Sidebar Component: Quick Status Card */}
       <div className="p-4 m-6 rounded-3xl bg-linear-to-br from-emerald-600 to-teal-700 text-white shadow-xl shadow-emerald-200">
         <p className="text-xs font-medium opacity-80">Weekly Usage</p>
         <div className="mt-3 h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
