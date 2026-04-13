@@ -13,7 +13,7 @@ type LeaveRecord = {
   employeeName: string;
   startDate: string;
   endDate: string;
-  leaveType: string; // FIX: avoid strict union conflict
+  leaveType: string; 
   status: LeaveStatus;
   reason?: string;
 };
@@ -47,7 +47,7 @@ const LeaveTable = ({ data, onEditClick }: Props) => {
 
   return (
     <>
-      <div className="bg-white rounded-[2.5rem] border border-emerald-50 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-emerald-50 shadow-sm overflow-hidden">
         <Table>
           <LeaveTableHeader />
           <TableBody>

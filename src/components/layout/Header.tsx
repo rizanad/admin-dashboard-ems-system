@@ -2,8 +2,8 @@ import { Bell, Search, Settings, ChevronDown } from "lucide-react";
 
 const Header = () => {
   return (
-    <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-10">
-      {/* Search Bar Container */}
+    <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-10">
+     
       <div className="flex items-center gap-6 flex-1">
         <div className="relative w-full max-w-sm group">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" size={18} />
@@ -15,7 +15,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Right Side Actions */}
+    
       <div className="flex items-center gap-4">
         <button className="p-2.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all relative">
           <Bell size={20} />
@@ -28,7 +28,6 @@ const Header = () => {
 
         <div className="h-8 w-px bg-slate-200 mx-2" />
 
-        {/* Profile Section */}
         <div className="flex items-center gap-3 pl-2 group cursor-pointer">
           <div className="flex flex-col items-end">
             <span className="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">Admin User</span>

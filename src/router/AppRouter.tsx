@@ -10,11 +10,14 @@ import Inventory from "../pages/inventory/index";
 import AddEmployeeForm from "@/pages/employee/manageEmployee/AddEmployeeForm";
 import EmployeeDetails from "@/pages/employee/manageEmployee/EmployeeDetails";
 import EditEmployeeForm from "@/pages/employee/manageEmployee/EditEmployeeForm";
+import ErrorBoundary from "@/components/layout/ErrorBoundary";
+import NotFound from "@/components/layout/NotFound";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement:<ErrorBoundary/>,
     children: [
       { path: "", element: <Dashboard /> },
       { path: "employee", element: <Employee /> },
@@ -23,7 +26,8 @@ export const router = createBrowserRouter([
       { path: "employee/details/:id", element: <EmployeeDetails /> },
       { path: "employee/edit/:id", element: <EditEmployeeForm /> },
       { path: "leave", element: <Leave /> },
-      { path: "inventory", element: <Inventory /> }
+      { path: "inventory", element: <Inventory /> },
+      { path: "*", element: <NotFound /> }
     ]
   }
 ]);

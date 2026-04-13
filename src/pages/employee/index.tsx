@@ -46,10 +46,10 @@ const Employee = () => {
   });
 
   return (
-    <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
+    <div className="p-3 space-y-8 min-h-screen">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-xl font-black text-slate-900 ">
             Employees
           </h1>
           <p className="text-slate-400 text-sm mt-1">

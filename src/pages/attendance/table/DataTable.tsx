@@ -66,7 +66,7 @@ const DataTable = ({ data, onEditClick }: Props) => {
 
   return (
     <>
-      <div className="bg-white rounded-[2.5rem] border border-emerald-50 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-emerald-50 shadow-sm overflow-hidden">
         <Table>
           <AttendanceTableHeader />
           <TableBody>

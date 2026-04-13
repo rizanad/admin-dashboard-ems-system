@@ -31,7 +31,7 @@ const DataTable = ({ data }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white rounded-[2.5rem] border border-emerald-50 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-emerald-50 shadow-sm overflow-hidden">
       <Table>
         <EmployeeTableHeader />
         <TableBody>

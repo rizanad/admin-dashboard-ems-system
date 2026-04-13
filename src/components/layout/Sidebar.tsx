@@ -19,7 +19,7 @@ const navItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-72 h-screen bg-[#fcfdfc] border-r border-emerald-100/50 flex flex-col sticky top-0">
+    <aside className="w-72 h-screen bg-[#fcfdfc] border-r border-gray-200 flex flex-col sticky top-0">
       <div className="p-8">
         <div className="flex items-center gap-3 group cursor-default">
           <div className="h-11 w-11 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform duration-300">

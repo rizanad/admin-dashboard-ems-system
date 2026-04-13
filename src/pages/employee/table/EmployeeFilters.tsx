@@ -23,7 +23,7 @@ const EmployeeFilters = ({
   ];
 
   return (
-    <div className="bg-white p-5 rounded-3xl border border-emerald-50 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
+    <div className="bg-white p-5 rounded-xl border border-emerald-50 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
       <div className="relative w-full md:w-96">
         <Search
           className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300"

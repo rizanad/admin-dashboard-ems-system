@@ -4,7 +4,6 @@ import AttendanceTable from "./table/DataTable";
 import AttendanceFilters from "./table/AttendanceFilters";
 import AddAttendanceForm from "./manageAttendance/AddAttendanceForm";
 import EditAttendanceForm from "./manageAttendance/EditAttendanceForm";
-// import type { Attendance } from "./table/DataTable";
 
 type Attendance = {
   id: string;
@@ -59,13 +58,13 @@ const Attendance = () => {
   });
 
   return (
-    <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
+    <div className="p-3 space-y-8 min-h-screen">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-xl font-black text-slate-900 tracking-tight leading-none">
+          <h1 className="text-xl font-black text-slate-900 tracking-tight ">
             Attendance Logs
           </h1>
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-slate-400 text-sm mt-1">
             Monitor daily check-ins and check-outs.
           </p>
         </div>
@@ -95,7 +94,7 @@ const Attendance = () => {
         setSelectedDate={setSelectedDate}
       />
 
-      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
         <AttendanceTable
           data={filteredAttendance}
           onEditClick={handleEditTrigger}

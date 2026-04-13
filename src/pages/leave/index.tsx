@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Download, CalendarClock } from "lucide-react";
+import { Download} from "lucide-react";
 import LeaveTable from "./table/DataTable";
 import LeaveFilters from "./table/LeaveFilters";
 import AddLeaveForm from "./manageLeave/AddLeaveForm";
@@ -65,18 +65,16 @@ const Leave = () => {
   });
 
   return (
-    <div className="p-10 space-y-8 bg-[#fcfdfc] min-h-screen">
+    <div className="p-3 space-y-8 min-h-screen">
 
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-white rounded-2xl shadow-sm border border-emerald-50 text-emerald-600">
-            <CalendarClock size={28} />
-          </div>
+          
           <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-              Leave Management
+            <h1 className="text-xl font-black text-slate-900 tracking-tight">
+              Leave Requests
             </h1>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
+            <p className="text-slate-400 text-sm font-bold mt-1">
               Track and approve employee time-off requests
             </p>
           </div>
