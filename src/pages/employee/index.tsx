@@ -1,4 +1,4 @@
-import { Plus, Download } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EmployeeTable from "./table/DataTable";
@@ -58,9 +58,7 @@ const Employee = () => {
         </div>
 
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-5 py-3 text-gray-600 bg-white border border-slate-200 rounded-2xl text-sm hover:border-emerald-400 hover:text-emerald-700 transition-all shadow-sm">
-            <Download size={16} /> Export
-          </button>
+         
 
           <button
             onClick={() => navigate("/employee/add-employee")}

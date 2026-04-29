@@ -13,8 +13,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { getUser } from "@/lib/auth";
+
 const attendanceSchema = z.object({
-  employeeId: z.string().min(1),
   status: z.enum(["Present", "Absent", "Late", "On Leave"]),
   date: z.string().min(1),
   checkIn: z.string().optional(),
@@ -67,8 +68,12 @@ const AddAttendanceForm = ({ onSave }: Props) => {
   const [open, setOpen] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
 
+  const user = getUser();
+
   useEffect(() => {
-    const data: Employee[] = JSON.parse(localStorage.getItem("employees") || "[]");
+    const data: Employee[] = JSON.parse(
+      localStorage.getItem("employees") || "[]"
+    );
     setEmployees(data);
   }, [open]);
 
@@ -89,18 +94,36 @@ const AddAttendanceForm = ({ onSave }: Props) => {
   const selectedStatus = watch("status");
 
   const onSubmit = async (data: AttendanceFormValues) => {
-    const existing = JSON.parse(localStorage.getItem("attendance") || "[]");
+    const existing = JSON.parse(
+      localStorage.getItem("attendance") || "[]"
+    );
 
-    const emp = employees.find((e) => e.id === data.employeeId);
+    const employeeId =
+      user?.role === "admin"
+        ? (document.querySelector("[name='employeeId']") as HTMLSelectElement)?.value
+        : user?.id;
+
+    if (!employeeId) {
+      toast.error("Employee not found");
+      return;
+    }
+
+    const emp = employees.find((e) => e.id === employeeId);
 
     const newRecord = {
       ...data,
+      employeeId,
       id: `ATT-${Date.now()}`,
-      employeeName: emp ? `${emp.firstName} ${emp.lastName}` : "Unknown",
+      employeeName: emp
+        ? `${emp.firstName} ${emp.lastName}`
+        : user?.username || "Unknown",
       createdAt: new Date().toISOString(),
     };
 
-    localStorage.setItem("attendance", JSON.stringify([...existing, newRecord]));
+    localStorage.setItem(
+      "attendance",
+      JSON.stringify([...existing, newRecord])
+    );
 
     toast.success("Attendance marked successfully");
 
@@ -130,24 +153,44 @@ const AddAttendanceForm = ({ onSave }: Props) => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5">
-          <FormField label="Select Employee" error={errors.employeeId}>
-            <select {...register("employeeId")} className={inputStyles(errors.employeeId)}>
-              <option value="">Choose Employee...</option>
-              {employees.map((emp) => (
-                <option key={emp.id} value={emp.id}>
-                  {emp.firstName} {emp.lastName} ({emp.id})
-                </option>
-              ))}
-            </select>
-          </FormField>
+          
+          {user?.role === "admin" && (
+            <FormField label="Select Employee" error={errors.status}>
+              <select
+                name="employeeId"
+                className={inputStyles()}
+                defaultValue=""
+              >
+                <option value="">Choose Employee...</option>
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.firstName} {emp.lastName} ({emp.id})
+                  </option>
+                ))}
+              </select>
+            </FormField>
+          )}
+
+          {user?.role !== "admin" && (
+            <div className="px-4 py-2.5 rounded-xl bg-slate-100 text-sm font-bold text-slate-700">
+              {user?.username} (self)
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <FormField label="Date" error={errors.date}>
-              <input type="date" {...register("date")} className={inputStyles(errors.date)} />
+              <input
+                type="date"
+                {...register("date")}
+                className={inputStyles(errors.date)}
+              />
             </FormField>
 
             <FormField label="Status" error={errors.status}>
-              <select {...register("status")} className={inputStyles(errors.status)}>
+              <select
+                {...register("status")}
+                className={inputStyles(errors.status)}
+              >
                 <option value="Present">Present</option>
                 <option value="Absent">Absent</option>
                 <option value="Late">Late</option>
@@ -158,18 +201,29 @@ const AddAttendanceForm = ({ onSave }: Props) => {
 
           {selectedStatus !== "Absent" && (
             <div className="grid grid-cols-2 gap-4">
-              <FormField label="Check In" error={errors.checkIn}>
-                <input type="time" {...register("checkIn")} className={inputStyles(errors.checkIn)} />
+              <FormField label="Check In">
+                <input
+                  type="time"
+                  {...register("checkIn")}
+                  className={inputStyles()}
+                />
               </FormField>
 
-              <FormField label="Check Out" error={errors.checkOut}>
-                <input type="time" {...register("checkOut")} className={inputStyles(errors.checkOut)} />
+              <FormField label="Check Out">
+                <input
+                  type="time"
+                  {...register("checkOut")}
+                  className={inputStyles()}
+                />
               </FormField>
             </div>
           )}
 
-          <FormField label="Notes / Remarks" error={errors.notes}>
-            <textarea {...register("notes")} className={`${inputStyles(errors.notes)} min-h-20 resize-none py-3`} />
+          <FormField label="Notes / Remarks">
+            <textarea
+              {...register("notes")}
+              className={`${inputStyles()} min-h-20 resize-none py-3`}
+            />
           </FormField>
 
           <div className="pt-4 flex gap-3">

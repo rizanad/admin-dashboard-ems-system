@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Download } from "lucide-react";
+
 import InventoryTable from "./table/DataTable";
 import InventoryFilters from "./table/InventoryFilters";
 import AddInventoryForm from "./manageInventory/AddInventoryForm";
@@ -70,9 +70,7 @@ const Inventory = () => {
         </div>
 
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-5 py-3 text-slate-600 bg-white border border-slate-200 rounded-2xl text-xs font-bold hover:border-emerald-400 hover:text-emerald-700 transition-all shadow-sm active:scale-95">
-            <Download size={16} /> Export CSV
-          </button>
+          
 
           <AddInventoryForm onSave={fetchInventory} />
         </div>

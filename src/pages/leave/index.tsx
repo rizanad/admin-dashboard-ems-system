@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Download} from "lucide-react";
 import LeaveTable from "./table/DataTable";
 import LeaveFilters from "./table/LeaveFilters";
 import AddLeaveForm from "./manageLeave/AddLeaveForm";
@@ -81,9 +80,7 @@ const Leave = () => {
         </div>
 
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-5 py-3 bg-white text-slate-600 border border-slate-100 rounded-2xl text-xs font-black hover:bg-slate-50 transition-all shadow-sm">
-            <Download size={16} /> Export Report
-          </button>
+         
 
           <AddLeaveForm onSave={fetchLeaves} />
         </div>
