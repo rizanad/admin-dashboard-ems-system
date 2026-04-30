@@ -1,4 +1,4 @@
-import {  Search,  ChevronDown, LogOut } from "lucide-react";
+import {   ChevronDown, LogOut } from "lucide-react";
 import { useState } from "react";
 import { getUser, logout } from "@/lib/auth";
 
