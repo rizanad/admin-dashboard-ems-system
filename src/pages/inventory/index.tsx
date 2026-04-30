@@ -4,6 +4,7 @@ import InventoryTable from "./table/DataTable";
 import InventoryFilters from "./table/InventoryFilters";
 import AddInventoryForm from "./manageInventory/AddInventoryForm";
 import EditInventoryForm from "./manageInventory/EditInventoryForm";
+import { toast } from "sonner";
 
 type InventoryItem = {
   id: string;
@@ -42,6 +43,13 @@ const Inventory = () => {
     setIsEditOpen(true);
   };
 
+  const handleDeleteInventory = (id: string) => {
+    const updated = items.filter((item) => item.id !== id);
+    localStorage.setItem("inventory", JSON.stringify(updated));
+    setItems(updated);
+    toast.warning("Inventory item deleted ! ")
+  };
+
   const filteredItems = items.filter((item) => {
     const matchesSearch = `${item.name} ${item.category}`
       .toLowerCase()
@@ -70,8 +78,6 @@ const Inventory = () => {
         </div>
 
         <div className="flex gap-3">
-          
-
           <AddInventoryForm onSave={fetchInventory} />
         </div>
       </header>
@@ -96,6 +102,7 @@ const Inventory = () => {
         <InventoryTable
           data={filteredItems}
           onEditClick={handleEditTrigger}
+          onDeleteClick={handleDeleteInventory}
         />
       </div>
 

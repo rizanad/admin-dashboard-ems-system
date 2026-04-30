@@ -3,6 +3,7 @@ import LeaveTable from "./table/DataTable";
 import LeaveFilters from "./table/LeaveFilters";
 import AddLeaveForm from "./manageLeave/AddLeaveForm";
 import EditLeaveForm from "./manageLeave/EditLeaveForm";
+import { toast } from "sonner";
 
 export type LeaveStatus = "Pending" | "Approved" | "Rejected";
 
@@ -49,6 +50,13 @@ const Leave = () => {
     setIsEditOpen(true);
   };
 
+  const handleDeleteLeave = (id: string) => {
+    const updated = leaveRecords.filter((record) => record.id !== id);
+    localStorage.setItem("leaves", JSON.stringify(updated));
+    setLeaveRecords(updated);
+    toast.warning("Leave record deleted ! ")
+  };
+
   const filteredLeaves = leaveRecords.filter((record) => {
     const matchesSearch =
       record.employeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -65,10 +73,8 @@ const Leave = () => {
 
   return (
     <div className="p-3 space-y-8 min-h-screen">
-
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-4">
-          
           <div>
             <h1 className="text-xl font-black text-slate-900 tracking-tight">
               Leave Requests
@@ -80,8 +86,6 @@ const Leave = () => {
         </div>
 
         <div className="flex gap-3">
-         
-
           <AddLeaveForm onSave={fetchLeaves} />
         </div>
       </header>
@@ -105,6 +109,7 @@ const Leave = () => {
         <LeaveTable
           data={filteredLeaves}
           onEditClick={handleEditTrigger}
+          onDeleteClick={handleDeleteLeave}
         />
       </div>
 

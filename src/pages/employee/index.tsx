@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EmployeeTable from "./table/DataTable";
 import EmployeeFilters from "./table/EmployeeFilters";
-// import type { Employee } from "../employee/types/employee";
+import { toast } from "sonner";
 
 export type EmployeeStatus = "Active" | "Inactive" | "On Leave";
 
@@ -12,7 +12,7 @@ export type Employee = {
   firstName: string;
   lastName: string;
   role: string;
-  email:string;
+  email: string;
   department: string;
   status: EmployeeStatus;
   joinDate: string;
@@ -28,9 +28,15 @@ const Employee = () => {
     const data = JSON.parse(
       localStorage.getItem("employees") || "[]"
     ) as Employee[];
-
     setEmployees(data);
   }, []);
+
+  const handleDeleteEmployee = (id: string) => {
+    const updated = employees.filter((emp) => emp.id !== id);
+    localStorage.setItem("employees", JSON.stringify(updated));
+    setEmployees(updated);
+    toast.warning("Employee record deleted ! ")
+  };
 
   const filteredEmployees = employees.filter((emp) => {
     const matchesSearch =
@@ -58,8 +64,6 @@ const Employee = () => {
         </div>
 
         <div className="flex gap-3">
-         
-
           <button
             onClick={() => navigate("/employee/add-employee")}
             className="flex items-center gap-2 px-3 py-3 bg-emerald-600 text-white rounded-2xl text-sm hover:bg-emerald-800 transition-all shadow-xl font-bold shadow-slate-200"
@@ -76,7 +80,10 @@ const Employee = () => {
         setSelectedDept={setSelectedDept}
       />
 
-      <EmployeeTable data={filteredEmployees} />
+      <EmployeeTable
+        data={filteredEmployees}
+        onDeleteClick={handleDeleteEmployee}
+      />
     </div>
   );
 };

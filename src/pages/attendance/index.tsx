@@ -3,6 +3,7 @@ import AttendanceTable from "./table/DataTable";
 import AttendanceFilters from "./table/AttendanceFilters";
 import AddAttendanceForm from "./manageAttendance/AddAttendanceForm";
 import EditAttendanceForm from "./manageAttendance/EditAttendanceForm";
+import { toast } from "sonner";
 
 type Attendance = {
   id: string;
@@ -38,9 +39,21 @@ const Attendance = () => {
     fetchAttendance();
   }, []);
 
+  
   const handleEditTrigger = (id: string) => {
     setSelectedEditId(id);
     setIsEditOpen(true);
+  };
+
+  const handleDelete = (id: string) => {
+    const updatedData = attendanceRecords.filter(
+      (record) => record.id !== id
+    );
+
+    localStorage.setItem("attendance", JSON.stringify(updatedData));
+
+    setAttendanceRecords(updatedData);
+    toast.warning("Attendance record deleted ! ")
   };
 
   const filteredAttendance = attendanceRecords.filter((record) => {
@@ -69,8 +82,6 @@ const Attendance = () => {
         </div>
 
         <div className="flex gap-3">
-          
-
           <AddAttendanceForm onSave={fetchAttendance} />
         </div>
       </header>
@@ -95,6 +106,7 @@ const Attendance = () => {
         <AttendanceTable
           data={filteredAttendance}
           onEditClick={handleEditTrigger}
+          onDeleteClick={handleDelete} 
         />
       </div>
 
