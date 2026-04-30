@@ -9,22 +9,20 @@ const ProtectedRoute = ({ allowedRoles }: Props) => {
   const user = getUser();
   const location = useLocation();
 
-  // 🔒 Not logged in → go to login
   if (!user) {
     return (
       <Navigate
         to="/login"
         replace
-        state={{ from: location }} // 👈 remember where user wanted to go
+        state={{ from: location.pathname }}
       />
     );
   }
 
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
+  if (allowedRoles?.length && !allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  // ✅ Allowed
   return <Outlet />;
 };
 

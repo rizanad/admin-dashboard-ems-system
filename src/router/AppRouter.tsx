@@ -21,31 +21,31 @@ export const router = createBrowserRouter([
 
   {
     path: "/",
-    element: <MainLayout />,
+    element: <ProtectedRoute allowedRoles={["admin", "employee"]} />,
     errorElement: <ErrorBoundary />,
     children: [
-      { path: "", element: <Dashboard /> },
-
       {
-        element: <ProtectedRoute allowedRoles={["admin", "employee"]} />,
+        element: <MainLayout />,
         children: [
+          { path: "", element: <Dashboard /> },
+
           { path: "attendance", element: <Attendance /> },
           { path: "leave", element: <Leave /> },
           { path: "employee/details/:id", element: <EmployeeDetails /> },
+
+          {
+            element: <ProtectedRoute allowedRoles={["admin"]} />,
+            children: [
+              { path: "employee", element: <Employee /> },
+              { path: "employee/add-employee", element: <AddEmployeeForm /> },
+              { path: "employee/edit/:id", element: <EditEmployeeForm /> },
+              { path: "inventory", element: <Inventory /> },
+            ],
+          },
         ],
       },
-
-      {
-        element: <ProtectedRoute allowedRoles={["admin"]} />,
-        children: [
-          { path: "employee", element: <Employee /> },
-          { path: "employee/add-employee", element: <AddEmployeeForm /> },
-          { path: "employee/edit/:id", element: <EditEmployeeForm /> },
-          { path: "inventory", element: <Inventory /> },
-        ],
-      },
-
-      { path: "*", element: <NotFound /> },
     ],
   },
+
+  { path: "*", element: <NotFound /> },
 ]);
